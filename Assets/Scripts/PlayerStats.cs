@@ -41,17 +41,17 @@ public class PlayerStats : MonoBehaviour
     [SerializeField]
     private Sprite godMode;
     private Sprite[,] faces = new Sprite[5,8];
+    [SerializeField]
+    private Image[] weaponIndicatorImage = new Image[6];
+    [SerializeField]
+    private Sprite[] weaponIndicatorSprite = new Sprite[12];
     void Start()
     {
         linearArray(faces);
         setFace();
         setHealth();
         setAmmo();
-    }
-
-    void Update()
-    {
-
+        setWeapons();
     }
     void GetHit(int damage)
     {
@@ -97,6 +97,14 @@ public class PlayerStats : MonoBehaviour
         ammo[6].SetText(maxRokt+"");
         ammo[7].SetText(maxCell+"");
     }
+    void setWeapons()
+    {
+        for (int i = 0; i <= 5; ++i)
+        {
+            if (weapons[i]) weaponIndicatorImage[i].sprite = weaponIndicatorSprite[i + 6];
+            else weaponIndicatorImage[i].sprite = weaponIndicatorSprite[i];
+        }
+    }
     public int getBullet()
     {
         return bull;
@@ -133,5 +141,5 @@ public class PlayerStats : MonoBehaviour
         cell += val;
         ammo[3].SetText(cell + "");
     }
-
+    
 }
