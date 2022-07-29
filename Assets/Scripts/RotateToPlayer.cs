@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class RotateToPlayer : MonoBehaviour
 {
-    public GameObject player;
+    private GameObject player;
     Vector3 target;
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
     void Update()
     {
         Rotate();
