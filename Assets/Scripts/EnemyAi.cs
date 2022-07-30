@@ -16,9 +16,11 @@ public class EnemyAi : MonoBehaviour
     }
     public Animator animator;
     public SFX controler;
+    private AngleController angleController;
     State state;
     void Start()
     {
+        angleController = GetComponent<AngleController>();
         state = State.Spawn;
         StateSpawn();
     }
@@ -26,7 +28,7 @@ public class EnemyAi : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        animator.SetFloat("spriteRot",angleController.index);
     }
     void StateSee()
     {

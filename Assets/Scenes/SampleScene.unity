@@ -957,6 +957,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 18b8065842da127408dab4c66fa0a945, type: 3}
   spriteRenderer: {fileID: 1816227904}
   player: {fileID: 898921196}
+  index: 1
 --- !u!114 &320894873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3349,7 +3350,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28996
+  m_Name: pb_Mesh28468
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

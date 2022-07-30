@@ -7,12 +7,9 @@ public class AngleController : MonoBehaviour
     public Sprite[] sprites;
     public SpriteRenderer spriteRenderer;
     public Transform player;
-    private Vector3 playerForward;
+    public int index;
     private Vector3 myForward;
-    private Vector3 side;
-    private float dir;
     private float angle;
-    private int index = 1;
 
     void Update()
     {
@@ -22,17 +19,14 @@ public class AngleController : MonoBehaviour
     }
     void GetVectors()
     {
-        playerForward = player.forward;
         myForward = new Vector3(player.position.x, transform.position.y, player.position.z);
         myForward -= transform.position;
-        angle = Vector3.Angle(transform.position, myForward);
+        angle = Vector3.SignedAngle(myForward, transform.forward,Vector3.up);
         index = GetIndex(angle);
     }
     void RotateSprite()
     {
-        side = Vector3.Cross(transform.position, myForward);
-        dir = Vector3.Dot(side, Vector3.up);
-        if (dir >= 0.0f || index==0 || index==4)
+        if (angle<0 || index==0 || index==4)
         {
             spriteRenderer.flipX = false;
         }
@@ -47,10 +41,10 @@ public class AngleController : MonoBehaviour
     }
     int GetIndex(float angle)
     {
-        if (angle <= 22.5f) return 0;
-        else if (22.5f < angle && angle <= 67.5f) return 1;
-        else if (67.5f < angle && angle <= 112.5f) return 2;
-        else if (112.5f < angle && angle <= 157.5f) return 3;
+        if (angle >= -22.5 && angle <= 22.5f) return 0;
+        else if ((22.5f < angle && angle <= 67.5f) || (-22.5f > angle && angle >= -67.5f)) return 1;
+        else if ((67.5f < angle && angle <= 112.5f) || (-67.5f > angle && angle >= -112.5f))return 2;
+        else if ((112.5f < angle && angle <= 157.5f) || (-112.5f > angle && angle >= -157.5f))return 3;
         else return 4;
     }
 }

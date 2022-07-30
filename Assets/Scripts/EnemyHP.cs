@@ -18,8 +18,16 @@ public class EnemyHP : MonoBehaviour
     }
     public void onDie()
     {
-        GameObject currentCorpse = Instantiate(corpse,gameObject.transform.position,Quaternion.identity);
-        currentCorpse.GetComponentInChildren<SpriteRenderer>().sprite = dieSprite;
-        Destroy(gameObject);
+        gameObject.GetComponentInChildren<SpriteRenderer>().sprite = dieSprite;
+        gameObject.layer = LayerMask.NameToLayer("Corpse");
+        gameObject.tag = "Corpse";
+        Component[] components = gameObject.GetComponents<Component>();
+        foreach( Component comp in components)
+        {
+            if(!(comp is CapsuleCollider || comp is Rigidbody || comp is Transform))
+            {
+                Destroy(comp);
+            }
+        }
     }
 }
