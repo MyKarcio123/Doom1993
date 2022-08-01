@@ -26,7 +26,7 @@ public class AngleController : MonoBehaviour
     }
     void RotateSprite()
     {
-        if (angle<0 || index==0 || index==4)
+        if (angle<0 && index!=0 && index!=4)
         {
             spriteRenderer.flipX = false;
         }

@@ -27,7 +27,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField]
     private int maxCell;
     [SerializeField]
-    private bool[] weapons = { false, false, false, false, false, false, false };
+    public bool[] weapons = { false, false, false, false, false, false, false };
     [SerializeField]
     private TextMeshProUGUI healthText;
     [SerializeField]
