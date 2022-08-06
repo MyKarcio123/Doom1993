@@ -53,7 +53,7 @@ public class PlayerStats : MonoBehaviour
         setAmmo();
         setWeapons();
     }
-    void GetHit(int damage)
+    public void GetHit(int damage)
     {
         int afterHit = health - damage;
         setFace(health,afterHit);

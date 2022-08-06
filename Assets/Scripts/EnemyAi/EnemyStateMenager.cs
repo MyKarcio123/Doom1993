@@ -14,13 +14,19 @@ public class EnemyStateMenager : MonoBehaviour
     public EnemyDieState DieState = new EnemyDieState();
     public EnemyXDieState XDieState = new EnemyXDieState();
     public Animator animator;
+    public NavMeshAgent agent;
     private AngleController angleController;
+    public GameObject target;
+    public GameObject projectile;
+    public GameObject spawnProjectile;
     public SFX controler;
     void Start()
     {
         angleController = GetComponent<AngleController>();
 
         animator = GetComponent<Animator>();
+
+        agent = GetComponent<NavMeshAgent>();
 
         currentState = SpawnState;
 
@@ -57,5 +63,11 @@ public class EnemyStateMenager : MonoBehaviour
             }
         }
         Destroy(this);
+    }
+    public void rangeAtack()
+    {
+        projectile.GetComponent<ExplosionProjectile>().target = target;
+        projectile.GetComponent<ExplosionProjectile>().parent = gameObject;
+        Instantiate(projectile, spawnProjectile.transform.position,Quaternion.identity);
     }
 }

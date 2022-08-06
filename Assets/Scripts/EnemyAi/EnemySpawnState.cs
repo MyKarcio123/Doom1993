@@ -1,22 +1,55 @@
 using UnityEngine;
-using System.Collections;
 
 public class EnemySpawnState : EnemyBaseState
 {
-    private GameObject target;
+    public GameObject target;
     private GameObject targetHead;
+    private Transform myTransform;
+    private Vector3 directionToTarget;
+    private float angle;
     public override void EnterState(EnemyStateMenager enemy)
     {
-        target = GameObject.FindGameObjectWithTag("Player");
-        targetHead = GameObject.FindGameObjectWithTag("MainCamera");
+        getObjects(enemy);
     }
     public override void UpdateState(EnemyStateMenager enemy)
     {
-        Debug.DrawLine(enemy.transform.position, target.transform.position, Color.yellow);
-        Debug.DrawLine(enemy.transform.position, targetHead.transform.position, Color.green);
+        calculateAngle();
+        if(checkFov(enemy)) enemy.SwitchState(enemy.SeeState);
     }
     public override void OnCollisionEnter(EnemyStateMenager enemy, Collision collision)
     {
 
+    }
+    private void getObjects(EnemyStateMenager enemy)
+    {
+        target = GameObject.FindGameObjectWithTag("Player");
+        enemy.target = target;
+        targetHead = GameObject.FindGameObjectWithTag("MainCamera");
+        myTransform = enemy.gameObject.transform;
+    }
+    private void calculateAngle()
+    {
+        directionToTarget = target.transform.position - myTransform.position;
+        angle = Vector3.SignedAngle(directionToTarget, myTransform.forward, Vector3.up);
+    }
+    private bool checkFov(EnemyStateMenager enemy)
+    {
+        if (angle >= -90 && angle <= 90)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(myTransform.position, directionToTarget, out hit) && hit.transform.gameObject == target)
+            {
+                return true;
+            }
+            else
+            {
+                if (Physics.Raycast(myTransform.position, targetHead.transform.position - myTransform.position, out hit) && hit.transform.gameObject == target)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
     }
 }
