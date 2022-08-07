@@ -18,8 +18,7 @@ public class ExplosionProjectile : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
         animator = gameObject.GetComponent<Animator>();
         animator.Play("Default");
-        rb.AddForce((new Vector3(target.transform.position.x, target.transform.position.y + 0.5f, target.transform.position.z) - gameObject.transform.position)*force, ForceMode.Force);
-        parent.GetComponent<EnemyStateMenager>().SwitchState(parent.GetComponent<EnemyStateMenager>().SeeState);
+        rb.AddForce((new Vector3(target.transform.position.x, target.transform.position.y + 0.5f, target.transform.position.z) - gameObject.transform.position).normalized*force, ForceMode.Force);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -30,11 +29,11 @@ public class ExplosionProjectile : MonoBehaviour
             animator.Play("Explode");
             if (other.CompareTag("Player"))
             {
-                other.GetComponent<PlayerStats>().GetHit(calculateDamage());
+                other.GetComponent<PlayerStats>().GetHit(damage);
             }
             else if (other.CompareTag("Enemy"))
             {
-                other.GetComponent<EnemyHP>().dealDamage(calculateDamage());
+                other.GetComponent<EnemyHP>().dealDamage(damage);
             }
         }
     }
@@ -46,9 +45,5 @@ public class ExplosionProjectile : MonoBehaviour
     private void explode()
     {
         Destroy(gameObject);
-    }
-    private int calculateDamage()
-    {
-        return Random.Range(1, 9)*damage;
     }
 }

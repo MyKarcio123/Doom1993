@@ -13,6 +13,7 @@ public class EnemyStateMenager : MonoBehaviour
     public EnemyPainState PainState = new EnemyPainState();
     public EnemyDieState DieState = new EnemyDieState();
     public EnemyXDieState XDieState = new EnemyXDieState();
+    public int damage = 3;
     public Animator animator;
     public NavMeshAgent agent;
     private AngleController angleController;
@@ -28,9 +29,7 @@ public class EnemyStateMenager : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
 
-        currentState = SpawnState;
-
-        currentState.EnterState(this);
+        SwitchState(SpawnState);
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -40,10 +39,12 @@ public class EnemyStateMenager : MonoBehaviour
     {
         currentState.UpdateState(this);
         animator.SetFloat("spriteRot", angleController.index);
+        Debug.Log(currentState);
     }
 
     public void SwitchState(EnemyBaseState state)
     {
+        agent.isStopped = true;
         currentState = state;
         currentState.EnterState(this);
     }
@@ -68,6 +69,29 @@ public class EnemyStateMenager : MonoBehaviour
     {
         projectile.GetComponent<ExplosionProjectile>().target = target;
         projectile.GetComponent<ExplosionProjectile>().parent = gameObject;
+        projectile.GetComponent<ExplosionProjectile>().damage = calculateDamage();
         Instantiate(projectile, spawnProjectile.transform.position,Quaternion.identity);
+    }
+    public void melleAtack()
+    {
+        if ((target.transform.position - gameObject.transform.position).magnitude < 1.5f)
+        {
+            if (target.CompareTag("Player"))
+            {
+                target.GetComponent<PlayerStats>().GetHit(calculateDamage());
+            }
+            else if (target.CompareTag("Enemy"))
+            {
+                target.GetComponent<EnemyHP>().dealDamage(calculateDamage());
+            }
+        }
+    }
+    private int calculateDamage()
+    {
+        return Random.Range(1, 9) * damage;
+    }
+    public void RestartState()
+    {
+        SwitchState(SeeState);
     }
 }

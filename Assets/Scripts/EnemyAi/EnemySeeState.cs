@@ -3,17 +3,20 @@ using UnityEngine.AI;
 
 public class EnemySeeState : EnemyBaseState
 {
-    float moveCount=3;
-    int currentMove;
-    int prevMove;
+    float moveCount;
     public override void EnterState(EnemyStateMenager enemy)
     {
-        //moveCount = Random.Range(1, 5);
+        enemy.agent.isStopped = false;
+        moveCount = Random.Range(1, 5);
     }
     public override void UpdateState(EnemyStateMenager enemy)
     {
-        Debug.Log(moveCount);
-        if (moveCount > 0)
+        enemy.agent.SetDestination(enemy.target.transform.position);
+        if ((enemy.target.transform.position - enemy.gameObject.transform.position).magnitude < 1.5)
+        {
+            enemy.SwitchState(enemy.RangeState);
+        }
+        else if (moveCount > 0)
         {
             moveCount -= Time.deltaTime;
         }

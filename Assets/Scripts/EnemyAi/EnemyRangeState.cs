@@ -4,7 +4,15 @@ public class EnemyRangeState : EnemyBaseState
 {
     public override void EnterState(EnemyStateMenager enemy)
     {
-        enemy.animator.Play("Range");
+        if ((enemy.target.transform.position - enemy.gameObject.transform.position).magnitude >= 1.5)
+        {
+            enemy.animator.Play("Range");
+        }
+        else
+        {
+            enemy.controler.PlayMelee();
+            enemy.animator.Play("Melee");
+        }
     }
     public override void UpdateState(EnemyStateMenager enemy)
     {
