@@ -14,7 +14,11 @@ public class EnemySpawnState : EnemyBaseState
     public override void UpdateState(EnemyStateMenager enemy)
     {
         calculateAngle();
-        if(checkFov(enemy)) enemy.SwitchState(enemy.SeeState);
+        if (checkFov(enemy))
+        {
+            enemy.controler.PlaySight();
+            enemy.SwitchState(enemy.SeeState);
+        }
     }
     public override void OnCollisionEnter(EnemyStateMenager enemy, Collision collision)
     {

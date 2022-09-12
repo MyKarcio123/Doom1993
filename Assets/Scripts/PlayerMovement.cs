@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     {
         GetInput();
         MovePlayer();
+        ActionKey();
     }
     void GetInput()
     {
@@ -36,5 +37,20 @@ public class PlayerMovement : MonoBehaviour
     void MovePlayer()
     {
         CC.Move(movmentVector * Time.deltaTime);
+    }
+    void ActionKey()
+    {
+        Debug.DrawRay(gameObject.transform.position, gameObject.transform.forward, Color.red);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(gameObject.transform.position,gameObject.transform.forward,out hit, 1f))
+            {
+                if (hit.transform.gameObject.tag == "Doors")
+                {
+                    hit.transform.gameObject.GetComponent<DoorsOpenScript>().openDoors();
+                }
+            }
+        }
     }
 }

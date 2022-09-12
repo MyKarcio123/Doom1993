@@ -10,7 +10,7 @@ public class EnemyRangeState : EnemyBaseState
         }
         else
         {
-            enemy.controler.PlayMelee();
+            if(enemy.haveMelee) enemy.controler.PlayMelee();
             enemy.animator.Play("Melee");
         }
     }

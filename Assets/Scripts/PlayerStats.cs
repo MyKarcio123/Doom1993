@@ -6,6 +6,7 @@ using TMPro;
 
 public class PlayerStats : MonoBehaviour
 {
+    public int armorProt = 3;
     [SerializeField]
     private int health;
     [SerializeField]
@@ -18,18 +19,16 @@ public class PlayerStats : MonoBehaviour
     private int rokt;
     [SerializeField]
     private int cell;
-    [SerializeField]
-    private int maxBull;
-    [SerializeField]
-    private int maxShel;
-    [SerializeField]
-    private int maxRokt;
-    [SerializeField]
-    private int maxCell;
+    public int maxBull;
+    public int maxShel;
+    public int maxRokt;
+    public int maxCell;
     [SerializeField]
     public bool[] weapons = { false, false, false, false, false, false, false };
     [SerializeField]
-    private TextMeshProUGUI healthText;
+    private TextMeshProUGUI healthText;    
+    [SerializeField]
+    private TextMeshProUGUI armorText;
     [SerializeField]
     private Image faceImage;
     [SerializeField]
@@ -52,13 +51,39 @@ public class PlayerStats : MonoBehaviour
         setHealth();
         setAmmo();
         setWeapons();
+        setArmor();
     }
     public void GetHit(int damage)
     {
-        int afterHit = health - damage;
+        int damageToArmor = damage / armorProt;
+        int damageToHp = damage - damageToArmor;
+        armor -= damageToArmor;
+        if (armor < 0)
+        {
+            damageToHp -= armor;
+            armor = 0;
+        }
+        int afterHit = health - damageToHp;
         setFace(health,afterHit);
         health = afterHit;
         setHealth();
+        setArmor();
+    }
+    public void SetNewHP(int hp,int maxAdded)
+    {
+        int afterHP = health + hp;
+        if (afterHP > maxAdded) afterHP = maxAdded;
+        setFace(health, afterHP);
+        health = afterHP;
+        setHealth();
+    }    
+    public void SetNewArmor(int addArmor,int maxAdded,int newprot)
+    {
+        int afterArmor = armor + addArmor;
+        if (afterArmor > maxAdded) afterArmor = maxAdded;
+        armor = afterArmor;
+        if (newprot != 0) armorProt = newprot;
+        setArmor();
     }
     void linearArray(Sprite[,] faces)
     {
@@ -73,11 +98,11 @@ public class PlayerStats : MonoBehaviour
     void setFace(int beforeHit=0, int afterHit=0)
     {
         int healthType = 0;
-        if (health >= 80) healthType = 0;
-        else if (health >= 60) healthType = 1;
-        else if (health >= 40) healthType = 2;
-        else if (health >= 20) healthType = 3;
-        else if (health >= 1) healthType = 4;
+        if (afterHit >= 80) healthType = 0;
+        else if (afterHit >= 60) healthType = 1;
+        else if (afterHit >= 40) healthType = 2;
+        else if (afterHit >= 20) healthType = 3;
+        else if (afterHit >= 1) healthType = 4;
         else faceImage.sprite = die;
         if (beforeHit - afterHit >= 20) faceImage.sprite = faces[healthType, 5];
         else faceImage.sprite = faces[healthType, 1];
@@ -85,6 +110,10 @@ public class PlayerStats : MonoBehaviour
     void setHealth()
     {
         healthText.SetText(health + "%");
+    }
+    void setArmor()
+    {
+        armorText.SetText(armor + "%");
     }
     void setAmmo()
     {
@@ -141,5 +170,12 @@ public class PlayerStats : MonoBehaviour
         cell += val;
         ammo[3].SetText(cell + "");
     }
-    
+    public int getHealth()
+    {
+        return health;
+    }    
+    public int getArmor()
+    {
+        return armor;
+    }
 }

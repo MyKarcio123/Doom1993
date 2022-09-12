@@ -10,7 +10,7 @@ public class Pistol : MonoBehaviour
     public Transform shotingPoint;
     public LayerMask user;
     public Animator animator;
-    public int damage;
+    public int maxDamage;
     public int shotsAtOnce;
     public int range;
     public int ammoType;
@@ -22,6 +22,7 @@ public class Pistol : MonoBehaviour
     public bool allwaysSpread;
     public float angleSpreadMax = 5.5f;
     public float angleSpreadMin = 2;
+    public RandomFunction random;
     public WeaponController weaponController;
     private bool shooting = false;
     private int ammo;
@@ -69,9 +70,12 @@ public class Pistol : MonoBehaviour
         Vector3 dir;
         for(int i = 0; i < shotsAtOnce; i++) { 
             if (shotedBullet>0 || allwaysSpread) {
-                float angle = Random.Range(angleSpreadMin, angleSpreadMax);
-                int randomIndex = Random.Range(0, 2);
-                angle = angle * minus[randomIndex];
+                float angle = random.randomNumberThreeSigma(angleSpreadMin, angleSpreadMax);
+                if (angleSpreadMin >= 0)
+                {
+                    int randomIndex = Random.Range(0, 2);
+                    angle = angle * minus[randomIndex];
+                }
                 dir = getSpreadVector(angle);
             }
             else
@@ -84,7 +88,8 @@ public class Pistol : MonoBehaviour
                 if (hit.collider.gameObject.CompareTag("Enemy"))
                 {
                     Instantiate(bloodPuff, hit.point + new Vector3(0f, 0.01f, -0.01f), Quaternion.LookRotation(hit.normal));
-                    hit.collider.gameObject.GetComponent<EnemyHP>().dealDamage(damage);
+                    int damageAtPellot = Random.Range(1, maxDamage+1) * 5;
+                    hit.collider.gameObject.GetComponent<EnemyHP>().dealDamage(damageAtPellot);
                 }
                 else { 
                     Instantiate(puff, hit.point + new Vector3(0f, 0.01f, -0.01f), Quaternion.LookRotation(hit.normal));

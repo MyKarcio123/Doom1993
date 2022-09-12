@@ -10,6 +10,7 @@ public class SFX : MonoBehaviour
     public AudioClip[] death;
     public AudioClip roaming;
     public AudioClip pain;
+    public AudioClip atackSound;
     private int sightSize;
     private int deathSize;
 
@@ -43,6 +44,11 @@ public class SFX : MonoBehaviour
     public void PlayRoaming()
     {
         audioSource.clip = roaming;
+        audioSource.Play();
+    }
+    public void PlayAtack()
+    {
+        audioSource.clip = atackSound;
         audioSource.Play();
     }
 }

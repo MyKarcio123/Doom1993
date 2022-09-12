@@ -10,7 +10,10 @@ public class AngleController : MonoBehaviour
     public int index;
     private Vector3 myForward;
     private float angle;
-
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
     void Update()
     {
         GetVectors();

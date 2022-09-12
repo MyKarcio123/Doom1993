@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyStateMenager : MonoBehaviour
 {
-    EnemyBaseState currentState;
+    public EnemyBaseState currentState;
     public EnemySpawnState SpawnState = new EnemySpawnState();
     public EnemySeeState SeeState = new EnemySeeState();
     public EnemyRangeState RangeState = new EnemyRangeState();
@@ -13,9 +13,13 @@ public class EnemyStateMenager : MonoBehaviour
     public EnemyPainState PainState = new EnemyPainState();
     public EnemyDieState DieState = new EnemyDieState();
     public EnemyXDieState XDieState = new EnemyXDieState();
-    public int damage = 3;
+    public int damageMultiply = 3;
+    public float rayCastSpreadAngle;
+    [HideInInspector]
     public Animator animator;
+    [HideInInspector]
     public NavMeshAgent agent;
+    public bool haveMelee = true;
     private AngleController angleController;
     public GameObject target;
     public GameObject projectile;
@@ -39,11 +43,11 @@ public class EnemyStateMenager : MonoBehaviour
     {
         currentState.UpdateState(this);
         animator.SetFloat("spriteRot", angleController.index);
-        Debug.Log(currentState);
     }
 
     public void SwitchState(EnemyBaseState state)
     {
+        agent.velocity = Vector3.zero;
         agent.isStopped = true;
         currentState = state;
         currentState.EnterState(this);
@@ -64,34 +68,5 @@ public class EnemyStateMenager : MonoBehaviour
             }
         }
         Destroy(this);
-    }
-    public void rangeAtack()
-    {
-        projectile.GetComponent<ExplosionProjectile>().target = target;
-        projectile.GetComponent<ExplosionProjectile>().parent = gameObject;
-        projectile.GetComponent<ExplosionProjectile>().damage = calculateDamage();
-        Instantiate(projectile, spawnProjectile.transform.position,Quaternion.identity);
-    }
-    public void melleAtack()
-    {
-        if ((target.transform.position - gameObject.transform.position).magnitude < 1.5f)
-        {
-            if (target.CompareTag("Player"))
-            {
-                target.GetComponent<PlayerStats>().GetHit(calculateDamage());
-            }
-            else if (target.CompareTag("Enemy"))
-            {
-                target.GetComponent<EnemyHP>().dealDamage(calculateDamage());
-            }
-        }
-    }
-    private int calculateDamage()
-    {
-        return Random.Range(1, 9) * damage;
-    }
-    public void RestartState()
-    {
-        SwitchState(SeeState);
     }
 }

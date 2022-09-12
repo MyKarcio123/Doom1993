@@ -7,7 +7,7 @@ public class EnemySeeState : EnemyBaseState
     public override void EnterState(EnemyStateMenager enemy)
     {
         enemy.agent.isStopped = false;
-        moveCount = Random.Range(1, 5);
+        moveCount = Random.Range(0f, 5f);
     }
     public override void UpdateState(EnemyStateMenager enemy)
     {
