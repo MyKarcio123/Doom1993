@@ -53,7 +53,7 @@ public class DoorsOpenScript : MonoBehaviour
         float z = gameObject.transform.position.z;
         while (gameObject.transform.position.y > startedY)
         {
-            //speed = doorSpeed * Time.deltaTime;
+            speed = doorSpeed * Time.deltaTime;
             gameObject.transform.position = new Vector3(x, gameObject.transform.position.y - doorSpeed, z);
             yield return null;
         }
